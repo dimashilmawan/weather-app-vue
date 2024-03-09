@@ -6,7 +6,7 @@
         <p>Local Weather</p></RouterLink
       >
       <div class="flex items-center gap-3">
-        <button>
+        <button @click="toggleModal">
           <i class="fa-solid fa-circle-info text-2xl"></i>
         </button>
         <button>
@@ -15,7 +15,18 @@
       </div>
     </nav>
   </header>
+  <ModalWrapper @close-modal="toggleModal" :show-modal="showModal">
+    <ModalInfo />
+  </ModalWrapper>
 </template>
 <script setup>
+import { ref } from "vue";
 import { RouterLink } from "vue-router";
+import ModalWrapper from "./ModalWrapper.vue";
+import ModalInfo from "./ModalInfo.vue";
+const showModal = ref(false);
+
+function toggleModal() {
+  showModal.value = !showModal.value;
+}
 </script>
