@@ -2,7 +2,7 @@
   <Teleport to="body">
     <Transition name="modal-backdrop">
       <div
-        class="fixed inset-0 w-full bg-black/30 backdrop-blur-[2px]"
+        class="fixed inset-0 w-full bg-black/50"
         v-if="showModal"
         @click="$emit('closeModal')"
       >

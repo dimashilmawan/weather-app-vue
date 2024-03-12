@@ -11,14 +11,21 @@
         >
       </template></VSelect
     >
+    <Suspense>
+      <CityList />
+      <template #fallback>
+        <p>Loading...</p>
+      </template>
+    </Suspense>
   </main>
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { Suspense, ref, watch } from "vue";
 import debounce from "lodash.debounce";
 import VSelect from "vue-select";
 import { useRouter } from "vue-router";
+import CityList from "@/components/CityList.vue";
 
 const options = ref([]);
 const selected = ref(null);
@@ -49,7 +56,7 @@ const handleSearchCity = (search, loading) => {
 };
 
 const getCityAndSetOptions = debounce(async (search, loading) => {
-  const url = `https://wft-geo-db.p.rapidapi.com/v1/geo/cities?minPopulation=1000000&namePrefix=${search}`;
+  const url = `https://wft-geo-db.p.rapidapi.com/v1/geo/cities?minPopulation=500000&namePrefix=${search}`;
   const fetchOptions = {
     method: "GET",
     headers: {

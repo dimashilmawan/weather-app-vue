@@ -7,10 +7,10 @@
       >
       <div class="flex items-center gap-3">
         <button @click="toggleModal">
-          <i class="fa-solid fa-circle-info text-2xl"></i>
+          <i class="fa-solid fa-circle-info text-xl"></i>
         </button>
-        <button>
-          <i class="fa-solid fa-circle-plus text-2xl"></i>
+        <button @click="saveCity" v-if="route.query.preview">
+          <i class="fa-solid fa-circle-plus text-xl"></i>
         </button>
       </div>
     </nav>
@@ -21,12 +21,43 @@
 </template>
 <script setup>
 import { ref } from "vue";
-import { RouterLink } from "vue-router";
+import { RouterLink, useRoute, useRouter } from "vue-router";
+import { nanoid } from "nanoid";
+
 import ModalWrapper from "./ModalWrapper.vue";
 import ModalInfo from "./ModalInfo.vue";
+
+const savedCities = ref([]);
 const showModal = ref(false);
 
-function toggleModal() {
+const router = useRouter();
+const route = useRoute();
+
+const toggleModal = () => {
   showModal.value = !showModal.value;
-}
+};
+
+const saveCity = () => {
+  // if (localStorage.getItem("saved-cities")) {
+  //   savedCities.value = JSON.parse(localStorage.getItem("saved-cities"));
+  // }
+
+  // const locationObj = {
+  //   id: nanoid(),
+  //   city: route.params.city,
+  //   region: route.params.region,
+  //   coords: {
+  //     lat: route.query.lat,
+  //     lon: route.query.lon,
+  //   },
+  // };
+
+  // savedCities.value.push(locationObj);
+  // localStorage.setItem("saved-cities", JSON.stringify(savedCities.value));
+
+  const query = Object.assign({}, route.query);
+  delete query.preview;
+
+  router.replace({ query });
+};
 </script>
