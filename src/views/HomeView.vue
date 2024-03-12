@@ -1,11 +1,6 @@
 <template>
   <main>
-    <VSelect
-      :options="options"
-      @search="handleSearchCity"
-      v-model="selected"
-      :reduce="(city) => city.value"
-    >
+    <VSelect :options="options" @search="handleSearchCity" v-model="selected">
       <template v-slot:no-options="{ search, searching }">
         <template v-if="searching">
           No results found for <em>{{ search }}</em
@@ -23,31 +18,37 @@
 import { ref, watch } from "vue";
 import debounce from "lodash.debounce";
 import VSelect from "vue-select";
+import { useRouter } from "vue-router";
 
 const options = ref([]);
 const selected = ref(null);
+const router = useRouter();
 
 watch(selected, async () => {
   if (selected.value) {
-    try {
-      const res = await fetch(
-        `https://api.openweathermap.org/data/2.5/weather?lat=${selected.value.lat}&lon=${selected.value.lon}&appid=6f0bb03ad21eda5e7fe7770d6bf2d28d`,
-      );
-      const result = await res.json();
-
-      console.log(result);
-    } catch (error) {}
+    const lat = selected.value.value.lat;
+    const lon = selected.value.value.lon;
+    const [city, region] = selected.value.label.split(",");
+    router.push({
+      name: "city",
+      params: {
+        city,
+        region: region.replaceAll(" ", ""),
+      },
+      query: { lat, lon, preview: true },
+    });
   }
 });
 
 const handleSearchCity = (search, loading) => {
   if (search) {
     loading(true);
-    fetchCity(search, loading);
+    console.log("search");
+    getCityAndSetOptions(search, loading);
   }
 };
 
-const fetchCity = debounce(async (search, loading) => {
+const getCityAndSetOptions = debounce(async (search, loading) => {
   const url = `https://wft-geo-db.p.rapidapi.com/v1/geo/cities?minPopulation=1000000&namePrefix=${search}`;
   const fetchOptions = {
     method: "GET",
@@ -59,16 +60,19 @@ const fetchCity = debounce(async (search, loading) => {
 
   try {
     const res = await fetch(url, fetchOptions);
-    if (!res.ok) throw new Error("Something went wrong");
     const result = await res.json();
 
-    const selectOptions = result.data.map((data) => ({
+    if (!res.ok) throw new Error(result.message);
+
+    const citiesData = result.data;
+
+    const selectOptions = citiesData.map((data, index) => ({
+      id: index,
       label: `${data.name}, ${data.region}, ${data.country}`,
       value: { lat: data.latitude, lon: data.longitude },
     }));
 
     options.value = selectOptions;
-    console.log("after push options");
   } catch (error) {
   } finally {
     loading(false);

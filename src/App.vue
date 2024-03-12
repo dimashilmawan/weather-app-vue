@@ -5,12 +5,10 @@ import NavBar from "./components/NavBar.vue";
 </script>
 
 <template>
-  <div class="text-gray-700">
+  <div class="text-gray-800">
     <Container class="!max-w-xl">
       <NavBar />
       <RouterView />
     </Container>
   </div>
 </template>
-
-<style scoped></style>
