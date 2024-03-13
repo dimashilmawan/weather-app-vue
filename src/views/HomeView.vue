@@ -11,12 +11,13 @@
         >
       </template></VSelect
     >
-    <Suspense>
+    <WeatherList />
+    <!-- <Suspense>
       <CityList />
       <template #fallback>
         <p>Loading...</p>
       </template>
-    </Suspense>
+    </Suspense> -->
   </main>
 </template>
 
@@ -26,6 +27,7 @@ import debounce from "lodash.debounce";
 import VSelect from "vue-select";
 import { useRouter } from "vue-router";
 import CityList from "@/components/CityList.vue";
+import WeatherList from "@/components/WeatherList.vue";
 
 const options = ref([]);
 const selected = ref(null);
@@ -33,16 +35,16 @@ const router = useRouter();
 
 watch(selected, async () => {
   if (selected.value) {
-    const lat = selected.value.value.lat;
-    const lon = selected.value.value.lon;
+    const lat = selected.value.coords.lat;
+    const lon = selected.value.coords.lon;
     const [city, region] = selected.value.label.split(",");
     router.push({
-      name: "city",
+      name: "weather",
       params: {
         city,
-        region: region.replaceAll(" ", ""),
+        region: region.trim(),
       },
-      query: { lat, lon, preview: true },
+      query: { lat, lon },
     });
   }
 });
@@ -50,7 +52,6 @@ watch(selected, async () => {
 const handleSearchCity = (search, loading) => {
   if (search) {
     loading(true);
-    console.log("search");
     getCityAndSetOptions(search, loading);
   }
 };
@@ -76,7 +77,7 @@ const getCityAndSetOptions = debounce(async (search, loading) => {
     const selectOptions = citiesData.map((data, index) => ({
       id: index,
       label: `${data.name}, ${data.region}, ${data.country}`,
-      value: { lat: data.latitude, lon: data.longitude },
+      coords: { lat: data.latitude, lon: data.longitude },
     }));
 
     options.value = selectOptions;
@@ -84,5 +85,5 @@ const getCityAndSetOptions = debounce(async (search, loading) => {
   } finally {
     loading(false);
   }
-}, 500);
+}, 350);
 </script>

@@ -109,14 +109,13 @@ const route = useRoute();
 const getWeatherData = async () => {
   try {
     const res = await fetch(
-      `https://api.openweathermap.org/data/2.5/onecall?lat=${route.query.lat}&lon=${route.query.lon}&exclude={part}&appid=6f0bb03ad21eda5e7fe7770d6bf2d28d&units=metric`,
+      `https://api.openweathermap.org/data/2.5/onecall?lat=${route.query.lat}&lon=${route.query.lon}&appid=6f0bb03ad21eda5e7fe7770d6bf2d28d&units=metric`,
     );
     const result = await res.json();
 
     if (!res.ok) throw new Error(result.message);
 
     const weatherData = result;
-    console.log(result);
 
     // calculate current date & time
     const localOffset = new Date().getTimezoneOffset() * 60000;
@@ -132,6 +131,7 @@ const getWeatherData = async () => {
     return weatherData;
   } catch (error) {
     console.log(error);
+    console.log("async city error");
   }
 };
 

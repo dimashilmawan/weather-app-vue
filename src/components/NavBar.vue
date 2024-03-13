@@ -9,7 +9,7 @@
         <button @click="toggleModal">
           <i class="fa-solid fa-circle-info text-xl"></i>
         </button>
-        <button @click="saveCity" v-if="route.query.preview">
+        <button @click="saveWeather" v-if="!hasSaved && route.path !== '/'">
           <i class="fa-solid fa-circle-plus text-xl"></i>
         </button>
       </div>
@@ -20,44 +20,49 @@
   </ModalWrapper>
 </template>
 <script setup>
-import { ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { RouterLink, useRoute, useRouter } from "vue-router";
 import { nanoid } from "nanoid";
 
 import ModalWrapper from "./ModalWrapper.vue";
 import ModalInfo from "./ModalInfo.vue";
 
-const savedCities = ref([]);
+const savedWeathers = ref([]);
 const showModal = ref(false);
 
-const router = useRouter();
 const route = useRoute();
 
 const toggleModal = () => {
   showModal.value = !showModal.value;
 };
 
-const saveCity = () => {
-  // if (localStorage.getItem("saved-cities")) {
-  //   savedCities.value = JSON.parse(localStorage.getItem("saved-cities"));
-  // }
+const saveWeather = () => {
+  const weatherObj = {
+    id: nanoid(),
+    city: route.params.city,
+    region: route.params.region,
+    coords: {
+      lat: route.query.lat,
+      lon: route.query.lon,
+    },
+  };
 
-  // const locationObj = {
-  //   id: nanoid(),
-  //   city: route.params.city,
-  //   region: route.params.region,
-  //   coords: {
-  //     lat: route.query.lat,
-  //     lon: route.query.lon,
-  //   },
-  // };
-
-  // savedCities.value.push(locationObj);
-  // localStorage.setItem("saved-cities", JSON.stringify(savedCities.value));
-
-  const query = Object.assign({}, route.query);
-  delete query.preview;
-
-  router.replace({ query });
+  savedWeathers.value.push(weatherObj);
+  localStorage.setItem("saved-weathers", JSON.stringify(savedWeathers.value));
 };
+
+const hasSaved = computed(() => {
+  return savedWeathers.value.some((weather) => {
+    return (
+      weather.coords.lat === route.query.lat &&
+      weather.coords.lon === route.query.lon
+    );
+  });
+});
+
+onMounted(() => {
+  if (localStorage.getItem("saved-weathers")) {
+    savedWeathers.value = JSON.parse(localStorage.getItem("saved-weathers"));
+  }
+});
 </script>
