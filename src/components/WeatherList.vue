@@ -1,11 +1,12 @@
 <template>
   <p v-if="isLoading">Loading</p>
   <div v-else-if="isError">{{ isError }}</div>
+  <div v-else-if="savedWeathers.length === 0">Empty</div>
   <ul v-else class="mt-6 space-y-4">
     <WeatherCard
       v-for="weather in savedWeathers"
       :weather="weather"
-      :key="weather.id"
+      :key="weather.coords.lat + weather.coords.lon"
     />
   </ul>
 </template>
@@ -14,7 +15,7 @@ import { onMounted, ref } from "vue";
 import WeatherCard from "./WeatherCard.vue";
 
 const isLoading = ref(true);
-const savedWeathers = ref(null);
+const savedWeathers = ref([]);
 const isError = ref(null);
 
 onMounted(async () => {
@@ -50,6 +51,9 @@ onMounted(async () => {
     } finally {
       isLoading.value = false;
     }
+  } else {
+    console.log(savedWeathers.value);
+    isLoading.value = false;
   }
 });
 </script>

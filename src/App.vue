@@ -5,7 +5,9 @@ import NavBar from "./components/NavBar.vue";
 </script>
 
 <template>
-  <div class="font-roboto text-gray-800">
+  <div
+    class="min-h-screen bg-gradient-to-r from-[#0047AB] to-[#002640] font-roboto text-white"
+  >
     <Container class="!max-w-xl">
       <NavBar />
       <RouterView />

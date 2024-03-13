@@ -1,13 +1,13 @@
 <template>
   <div class="">
-    <h1 class="text-xl font-medium text-gray-800">About:</h1>
-    <p class="mt-2">
+    <h1 class="text-lg font-medium text-gray-800">About:</h1>
+    <p class="mt-1">
       The Local Weather allows you to track the current and future weather of
       cities of your choosing.
     </p>
 
-    <h2 class="mt-5 text-xl font-medium text-gray-800">How it works:</h2>
-    <ol class="mt-2 list-inside list-decimal space-y-1">
+    <h2 class="mt-4 text-lg font-medium text-gray-800">How it works:</h2>
+    <ol class="mt-1 list-inside list-decimal space-y-1">
       <li>Search for your city by entering the name into the search bar.</li>
       <li>
         Select a city within the results, this will take you to the current
@@ -19,8 +19,8 @@
       </li>
     </ol>
 
-    <h2 class="mt-5 text-xl font-medium text-gray-800">Removing a city</h2>
-    <p class="mt-2">
+    <h2 class="mt-4 text-lg font-medium text-gray-800">Removing a city</h2>
+    <p class="mt-1">
       If you no longer wish to track a city, simply select the city within the
       home page. At the bottom of the page, there will be am option to delete
       the city.

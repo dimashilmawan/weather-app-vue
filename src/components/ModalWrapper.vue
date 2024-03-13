@@ -9,18 +9,16 @@
         &nbsp;
       </div>
     </Transition>
+
     <Transition name="modal-content">
       <Container
-        class="fixed left-1/2 top-1/2 !max-w-xl -translate-x-1/2 -translate-y-1/2 rounded-xl bg-white p-6 shadow-lg"
+        class="fixed left-1/2 top-1/2 !max-w-xl -translate-x-1/2 -translate-y-1/2"
         v-if="showModal"
       >
-        <slot />
-        <div class="mt-6 flex w-full justify-end">
-          <button
-            @click="$emit('closeModal')"
-            class="flex rounded-md bg-emerald-500 px-4 py-2 font-medium text-white"
-          >
-            Close
+        <div class="relative rounded-xl bg-white p-8 shadow-lg">
+          <slot />
+          <button @click="$emit('closeModal')" class="absolute right-2 top-2">
+            <i class="fa-solid fa-circle-xmark text-xl">&nbsp;</i>
           </button>
         </div>
       </Container>

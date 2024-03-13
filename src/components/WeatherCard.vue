@@ -6,7 +6,7 @@
         params: { city: weather.city, region: weather.region },
         query: { lat: weather.coords.lat, lon: weather.coords.lon },
       }"
-      class="flex items-center justify-between rounded-md p-3 shadow-md"
+      class="flex items-center justify-between rounded-md bg-white/85 px-5 py-3 text-gray-700"
     >
       <div>
         <h2 class="text-3xl font-medium">{{ weather.city }}</h2>

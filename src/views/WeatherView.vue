@@ -1,8 +1,10 @@
 <template>
   <p v-if="isLoading">Loading</p>
   <div v-else-if="isError">{{ isError }}</div>
-  <div v-else class="mt-8 flex flex-col items-center justify-center">
-    <p class="text-3xl font-medium">{{ route.params.city }}</p>
+  <div v-else class="flex flex-col items-center justify-center p-24">
+    <p class="whitespace-nowrap text-3xl font-medium">
+      {{ route.params.city }}
+    </p>
     <p class="mt-2">
       {{
         new Date(weatherData.dt * 1000).toLocaleDateString("en-US", {
@@ -28,11 +30,15 @@
         >{{ Math.round(weatherData.main.feels_like) }} &#8451;</span
       >
     </p>
-    <img
-      :src="`https://openweathermap.org/img/wn/${weatherData.weather[0].icon}@4x.png`"
-      alt="weather icon"
-      class="-mt-2 h-36 w-36"
-    />
+    <div
+      class="flex items-center justify-center rounded-lg mix-blend-difference"
+    >
+      <img
+        :src="`https://openweathermap.org/img/wn/${weatherData.weather[0].icon}@4x.png`"
+        alt="weather icon"
+        class="-mt-2 h-36 w-36"
+      />
+    </div>
     <p class="-mt-7">{{ weatherData.weather[0].description }}</p>
   </div>
 </template>

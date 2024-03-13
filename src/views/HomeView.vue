@@ -1,32 +1,31 @@
 <template>
-  <main>
-    <VSelect :options="options" @search="handleSearchCity" v-model="selected">
+  <main class="pt-10">
+    <p class="mb-3">Start typing to search for a City.</p>
+    <VSelect
+      class="style-chooser"
+      :options="options"
+      @search="handleSearchCity"
+      v-model="selected"
+    >
       <template v-slot:no-options="{ search, searching }">
         <template v-if="searching">
           No results found for <em>{{ search }}</em
           >.
         </template>
-        <em v-else style="opacity: 0.5"
-          >Start typing to search for a country.</em
-        >
+        <em v-else style="opacity: 0.5">Start typing to search for a City.</em>
       </template></VSelect
     >
-    <WeatherList />
-    <!-- <Suspense>
-      <CityList />
-      <template #fallback>
-        <p>Loading...</p>
-      </template>
-    </Suspense> -->
+    <div class="py-6">
+      <WeatherList />
+    </div>
   </main>
 </template>
 
 <script setup>
-import { Suspense, ref, watch } from "vue";
+import { ref, watch } from "vue";
 import debounce from "lodash.debounce";
 import VSelect from "vue-select";
 import { useRouter } from "vue-router";
-import CityList from "@/components/CityList.vue";
 import WeatherList from "@/components/WeatherList.vue";
 
 const options = ref([]);
@@ -87,3 +86,23 @@ const getCityAndSetOptions = debounce(async (search, loading) => {
   }
 }, 350);
 </script>
+
+<style>
+.style-chooser .vs__search::placeholder,
+.style-chooser .vs__dropdown-toggle,
+.style-chooser .vs__dropdown-menu {
+  background: white;
+
+  border: none;
+  color: #374151;
+}
+
+.style-chooser .vs__dropdown-toggle {
+  height: 2.5rem !important ;
+}
+
+.style-chooser .vs__clear,
+.style-chooser .vs__open-indicator {
+  fill: #374151;
+}
+</style>

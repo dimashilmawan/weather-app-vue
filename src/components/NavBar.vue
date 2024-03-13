@@ -10,7 +10,13 @@
           <i class="fa-solid fa-circle-info text-xl"></i>
         </button>
         <button @click="saveWeather" v-if="!hasSaved && route.path !== '/'">
-          <i class="fa-solid fa-circle-plus text-xl"></i>
+          <i class="fa-regular fa-bookmark text-xl">&nbsp;</i>
+        </button>
+        <button
+          @click="removeWeather"
+          v-else-if="hasSaved && route.path !== '/'"
+        >
+          <i class="fa-solid fa-bookmark text-xl">&nbsp;</i>
         </button>
       </div>
     </nav>
@@ -19,15 +25,16 @@
     <ModalInfo />
   </ModalWrapper>
 </template>
+
 <script setup>
 import { computed, onMounted, ref } from "vue";
-import { RouterLink, useRoute, useRouter } from "vue-router";
-import { nanoid } from "nanoid";
+import { RouterLink, useRoute } from "vue-router";
 
 import ModalWrapper from "./ModalWrapper.vue";
 import ModalInfo from "./ModalInfo.vue";
 
 const savedWeathers = ref([]);
+
 const showModal = ref(false);
 
 const route = useRoute();
@@ -38,7 +45,6 @@ const toggleModal = () => {
 
 const saveWeather = () => {
   const weatherObj = {
-    id: nanoid(),
     city: route.params.city,
     region: route.params.region,
     coords: {
@@ -48,6 +54,15 @@ const saveWeather = () => {
   };
 
   savedWeathers.value.push(weatherObj);
+  localStorage.setItem("saved-weathers", JSON.stringify(savedWeathers.value));
+};
+
+const removeWeather = () => {
+  savedWeathers.value = savedWeathers.value.filter(
+    (weather) =>
+      weather.coords.lat !== route.query.lat &&
+      weather.coords.lon !== route.query.lon,
+  );
   localStorage.setItem("saved-weathers", JSON.stringify(savedWeathers.value));
 };
 
