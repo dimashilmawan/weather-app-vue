@@ -1,7 +1,7 @@
 <template>
-  <p v-if="isLoading">Loading</p>
+  <WeatherViewSkeleton v-if="isLoading" />
   <div v-else-if="isError">{{ isError }}</div>
-  <div v-else class="flex flex-col items-center justify-center p-24">
+  <div v-else class="flex flex-col items-center justify-center pt-24">
     <p class="whitespace-nowrap text-3xl font-medium">
       {{ route.params.city }}
     </p>
@@ -43,6 +43,7 @@
   </div>
 </template>
 <script setup>
+import WeatherViewSkeleton from "@/components/WeatherViewSkeleton.vue";
 import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 
@@ -61,8 +62,8 @@ onMounted(async () => {
 
     if (!res.ok) throw new Error(result.message);
 
+    await new Promise((resolve) => setTimeout(resolve, 500));
     weatherData.value = result;
-    console.log(result);
   } catch (error) {
     isError.value = error.message;
   } finally {

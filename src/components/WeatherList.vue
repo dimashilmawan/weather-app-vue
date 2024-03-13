@@ -1,5 +1,5 @@
 <template>
-  <p v-if="isLoading">Loading</p>
+  <p v-if="isLoading"><WeatherCardSkeleton /></p>
   <div v-else-if="isError">{{ isError }}</div>
   <div v-else-if="savedWeathers.length === 0">Empty</div>
   <ul v-else class="mt-6 space-y-4">
@@ -13,6 +13,7 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import WeatherCard from "./WeatherCard.vue";
+import WeatherCardSkeleton from "./WeatherCardSkeleton.vue";
 
 const isLoading = ref(true);
 const savedWeathers = ref([]);
@@ -41,11 +42,11 @@ onMounted(async () => {
 
       const weathers = await Promise.all(dataPromises);
 
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
       weathers.forEach((weather, index) => {
         savedWeathers.value[index].weatherData = weather;
       });
-
-      console.log(savedWeathers.value);
     } catch (error) {
       console.log(error);
     } finally {
