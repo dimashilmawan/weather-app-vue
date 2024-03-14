@@ -1,13 +1,17 @@
 <template>
   <WeatherViewSkeleton v-if="isLoading" />
-  <div v-else-if="isError">{{ isError }}</div>
+  <div v-else-if="isError" class="mt-24 rounded-md bg-red-950/60 p-10">
+    <p class="text-center text-xl font-medium">
+      {{ isError }}
+    </p>
+  </div>
   <div v-else class="flex flex-col items-center justify-center pt-24">
     <p class="whitespace-nowrap text-3xl font-medium">
       {{ route.params.city }}
     </p>
     <p class="mt-2">
       {{
-        new Date(weatherData.dt * 1000).toLocaleDateString("en-US", {
+        new Date(weatherData.localTime).toLocaleDateString("en-US", {
           weekday: "short",
           day: "numeric",
           month: "long",
@@ -15,7 +19,7 @@
       }}
       &nbsp;
       {{
-        new Date(weatherData.dt * 1000).toLocaleTimeString("en-US", {
+        new Date(weatherData.localTime).toLocaleTimeString("en-US", {
           hour: "numeric",
           minute: "numeric",
         })
@@ -53,17 +57,37 @@ const isLoading = ref(true);
 const weatherData = ref(null);
 const isError = ref(null);
 
+const calculateLocalTime = (dt, timezone) => {
+  const timestampMs = dt * 1000;
+
+  const date = new Date(timestampMs);
+
+  const utcTime = date.getTime() + date.getTimezoneOffset() * 60000;
+
+  const localTime = new Date(utcTime + timezone * 1000);
+
+  return localTime;
+};
+
 onMounted(async () => {
   try {
     const res = await fetch(
-      `https://api.openweathermap.org/data/2.5/weather?lat=${route.query.lat}&lon=${route.query.lon}&appid=6f0bb03ad21eda5e7fe7770d6bf2d28d&units=metric`,
+      `https://api.openweathermap.org/data/2.5/weather?lat=${route.query.lat}&lon=${route.query.lon}&appid=${import.meta.env.VITE_OPEN_WEATHER_API_KEY}&units=metric`,
     );
     const result = await res.json();
 
     if (!res.ok) throw new Error(result.message);
 
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    await new Promise((resolve) => setTimeout(resolve, 400));
+
     weatherData.value = result;
+
+    const localTime = calculateLocalTime(
+      weatherData.value.dt,
+      weatherData.value.timezone,
+    );
+
+    weatherData.value.localTime = localTime;
   } catch (error) {
     isError.value = error.message;
   } finally {

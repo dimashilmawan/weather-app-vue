@@ -1,6 +1,6 @@
 <template>
   <main class="pt-10">
-    <p class="mb-3">Start typing to search for a City.</p>
+    <p class="mb-3 text-xl font-medium">City Weather Forecast</p>
     <VSelect
       class="style-chooser"
       :options="options"
@@ -60,7 +60,7 @@ const getCityAndSetOptions = debounce(async (search, loading) => {
   const fetchOptions = {
     method: "GET",
     headers: {
-      "X-RapidAPI-Key": "1d095d3a11mshb2941a434ff6458p1fa04bjsnbc26a7b97043",
+      "X-RapidAPI-Key": import.meta.env.VITE_RAPID_API_KEY,
       "X-RapidAPI-Host": "wft-geo-db.p.rapidapi.com",
     },
   };

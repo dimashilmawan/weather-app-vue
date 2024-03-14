@@ -1,6 +1,10 @@
 <template>
-  <p v-if="isLoading"><WeatherCardSkeleton /></p>
-  <div v-else-if="isError">{{ isError }}</div>
+  <WeatherCardSkeleton v-if="isLoading" />
+  <div v-else-if="isError" class="mt-24 rounded-md bg-red-950/60 p-10">
+    <p class="text-center text-xl font-medium">
+      {{ isError }}
+    </p>
+  </div>
   <div v-else-if="savedWeathers.length === 0">Empty</div>
   <ul v-else class="mt-6 space-y-4">
     <WeatherCard
@@ -26,7 +30,7 @@ onMounted(async () => {
     try {
       const requests = savedWeathers.value.map((weather) => {
         return fetch(
-          `https://api.openweathermap.org/data/2.5/weather?lat=${weather.coords.lat}&lon=${weather.coords.lon}&appid=6f0bb03ad21eda5e7fe7770d6bf2d28d&units=metric`,
+          `https://api.openweathermap.org/data/2.5/weather?lat=${weather.coords.lat}&lon=${weather.coords.lon}&appid=${import.meta.env.VITE_OPEN_WEATHER_API_KEY}&units=metric`,
         );
       });
 
@@ -42,18 +46,17 @@ onMounted(async () => {
 
       const weathers = await Promise.all(dataPromises);
 
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      await new Promise((resolve) => setTimeout(resolve, 400));
 
       weathers.forEach((weather, index) => {
         savedWeathers.value[index].weatherData = weather;
       });
     } catch (error) {
-      console.log(error);
+      isError.value = error.message;
     } finally {
       isLoading.value = false;
     }
   } else {
-    console.log(savedWeathers.value);
     isLoading.value = false;
   }
 });

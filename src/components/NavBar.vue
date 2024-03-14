@@ -3,7 +3,7 @@
     <nav class="flex h-16 items-center justify-between">
       <RouterLink :to="{ name: 'home' }" class="flex items-center gap-3"
         ><i class="fa-solid fa-cloud-sun text-3xl"></i>
-        <p>Local Weather</p></RouterLink
+        <p class="font-medium">Local Weather</p></RouterLink
       >
       <div class="flex items-center gap-3">
         <button @click="toggleModal">
@@ -29,7 +29,7 @@
 <script setup>
 import { computed, onMounted, ref } from "vue";
 import { RouterLink, useRoute } from "vue-router";
-
+import { useToast } from "vue-toastification";
 import ModalWrapper from "./ModalWrapper.vue";
 import ModalInfo from "./ModalInfo.vue";
 
@@ -38,6 +38,8 @@ const savedWeathers = ref([]);
 const showModal = ref(false);
 
 const route = useRoute();
+
+const toast = useToast();
 
 const toggleModal = () => {
   showModal.value = !showModal.value;
@@ -55,6 +57,8 @@ const saveWeather = () => {
 
   savedWeathers.value.push(weatherObj);
   localStorage.setItem("saved-weathers", JSON.stringify(savedWeathers.value));
+
+  toast.success("Weather saved successfully!", { timeout: 2000 });
 };
 
 const removeWeather = () => {
@@ -64,6 +68,8 @@ const removeWeather = () => {
       weather.coords.lon !== route.query.lon,
   );
   localStorage.setItem("saved-weathers", JSON.stringify(savedWeathers.value));
+
+  toast.success("Weather removed successfully!", { timeout: 2000 });
 };
 
 const hasSaved = computed(() => {
