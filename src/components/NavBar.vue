@@ -28,7 +28,7 @@
 </template>
 
 <script setup>
-import { computed, inject, onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { RouterLink, useRoute } from "vue-router";
 import { useToast } from "vue-toastification";
 import ModalWrapper from "./ModalWrapper.vue";

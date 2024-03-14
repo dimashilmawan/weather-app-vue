@@ -6,13 +6,19 @@ import { Transition, provide, ref } from "vue";
 
 const isCelsius = ref(true);
 
-const toggleTemperature = () => {
+const toggleTemp = () => {
   isCelsius.value = !isCelsius.value;
+  localStorage.setItem("isCelsius", JSON.stringify(isCelsius.value));
+};
+
+const loadToggleTemp = (value) => {
+  isCelsius.value = value;
 };
 
 provide("isCelsius", {
   isCelsius,
-  toggleTemperature,
+  toggleTemp,
+  loadToggleTemp,
 });
 </script>
 
