@@ -15,16 +15,20 @@
 
       <div>
         <p class="text-end text-3xl font-medium">
-          {{ Math.round(weather.weatherData.main.temp) }}&deg;
+          {{ temperatureConverter(weather.weatherData.main.temp, isCelsius) }}
         </p>
         <div class="mt-2 flex gap-2 font-medium">
           <span class="text-xs">
             H:
-            {{ Math.round(weather.weatherData.main.temp_max) }}&deg;
+            {{
+              temperatureConverter(weather.weatherData.main.temp_max, isCelsius)
+            }}
           </span>
           <span class="text-xs">
             L:
-            {{ Math.round(weather.weatherData.main.temp_min) }}&deg;
+            {{
+              temperatureConverter(weather.weatherData.main.temp_min, isCelsius)
+            }}
           </span>
         </div>
       </div>
@@ -32,7 +36,18 @@
   </li>
 </template>
 <script setup>
+import { inject } from "vue";
 import { RouterLink } from "vue-router";
 
 defineProps(["weather"]);
+
+const { isCelsius } = inject("isCelsius");
+
+const temperatureConverter = (value, isCelsius) => {
+  if (isCelsius) {
+    return `${Math.round(value)} ℃`;
+  } else {
+    return `${Math.round((value * 9) / 5 + 32)} ℉`;
+  }
+};
 </script>

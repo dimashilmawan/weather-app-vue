@@ -2,7 +2,18 @@
 import { RouterView } from "vue-router";
 import Container from "./components/Container.vue";
 import NavBar from "./components/NavBar.vue";
-import { Transition } from "vue";
+import { Transition, provide, ref } from "vue";
+
+const isCelsius = ref(true);
+
+const toggleTemperature = () => {
+  isCelsius.value = !isCelsius.value;
+};
+
+provide("isCelsius", {
+  isCelsius,
+  toggleTemperature,
+});
 </script>
 
 <template>

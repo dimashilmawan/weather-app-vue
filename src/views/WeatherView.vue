@@ -26,13 +26,13 @@
       }}
     </p>
     <p class="mt-6 text-7xl font-bold">
-      {{ Math.round(weatherData.main.temp) }} &#8451;
+      {{ temperatureConverter(weatherData.main.temp, isCelsius) }}
     </p>
     <p class="mt-2">
       Feels like
-      <span class="font-semibold"
-        >{{ Math.round(weatherData.main.feels_like) }} &#8451;</span
-      >
+      <span class="font-semibold">{{
+        temperatureConverter(weatherData.main.feels_like, isCelsius)
+      }}</span>
     </p>
     <div
       class="flex items-center justify-center rounded-lg mix-blend-difference"
@@ -48,8 +48,10 @@
 </template>
 <script setup>
 import WeatherViewSkeleton from "@/components/WeatherViewSkeleton.vue";
-import { onMounted, ref } from "vue";
+import { inject, onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
+
+const { isCelsius } = inject("isCelsius");
 
 const route = useRoute();
 
@@ -67,6 +69,14 @@ const calculateLocalTime = (dt, timezone) => {
   const localTime = new Date(utcTime + timezone * 1000);
 
   return localTime;
+};
+
+const temperatureConverter = (value, isCelsius) => {
+  if (isCelsius) {
+    return `${Math.round(value)} ℃`;
+  } else {
+    return `${Math.round((value * 9) / 5 + 32)} ℉`;
+  }
 };
 
 onMounted(async () => {

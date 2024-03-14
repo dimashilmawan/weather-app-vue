@@ -1,48 +1,57 @@
 <template>
   <header>
     <nav class="flex h-16 items-center justify-between">
-      <RouterLink :to="{ name: 'home' }" class="flex items-center gap-3"
-        ><i class="fa-solid fa-cloud-sun text-3xl"></i>
-        <p class="font-medium">Local Weather</p></RouterLink
-      >
+      <RouterLink :to="{ name: 'home' }" class="flex items-center gap-3">
+        <FontAwesomeIcon :icon="faCloudSunRain" size="2xl" />
+        <p class="font-medium">Local Weather</p>
+      </RouterLink>
       <div class="flex items-center gap-3">
-        <button @click="toggleModal">
-          <i class="fa-solid fa-circle-info text-xl"></i>
+        <ToggleTemp />
+        <button @click="toggleModalInfo">
+          <FontAwesomeIcon :icon="faCircleInfo" size="lg" />
         </button>
         <button @click="saveWeather" v-if="!hasSaved && route.path !== '/'">
-          <i class="fa-regular fa-bookmark text-xl">&nbsp;</i>
+          <FontAwesomeIcon :icon="faBookmarkRegular" size="lg" />
         </button>
         <button
           @click="removeWeather"
           v-else-if="hasSaved && route.path !== '/'"
         >
-          <i class="fa-solid fa-bookmark text-xl">&nbsp;</i>
+          <FontAwesomeIcon :icon="faBookmarkSolid" size="lg" />
         </button>
       </div>
     </nav>
   </header>
-  <ModalWrapper @close-modal="toggleModal" :show-modal="showModal">
+  <ModalWrapper @close-modal="toggleModalInfo" :show-modal="showModalInfo">
     <ModalInfo />
   </ModalWrapper>
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from "vue";
+import { computed, inject, onMounted, ref } from "vue";
 import { RouterLink, useRoute } from "vue-router";
 import { useToast } from "vue-toastification";
 import ModalWrapper from "./ModalWrapper.vue";
 import ModalInfo from "./ModalInfo.vue";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import {
+  faBookmark as faBookmarkSolid,
+  faCircleInfo,
+  faCloudSunRain,
+} from "@fortawesome/free-solid-svg-icons";
+import { faBookmark as faBookmarkRegular } from "@fortawesome/free-regular-svg-icons";
+import ToggleTemp from "./ToggleTemp.vue";
 
 const savedWeathers = ref([]);
 
-const showModal = ref(false);
+const showModalInfo = ref(false);
 
 const route = useRoute();
 
 const toast = useToast();
 
-const toggleModal = () => {
-  showModal.value = !showModal.value;
+const toggleModalInfo = () => {
+  showModalInfo.value = !showModalInfo.value;
 };
 
 const saveWeather = () => {

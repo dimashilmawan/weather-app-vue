@@ -18,7 +18,7 @@
         <div class="relative rounded-xl bg-white p-8 shadow-lg">
           <slot />
           <button @click="$emit('closeModal')" class="absolute right-2 top-2">
-            <i class="fa-solid fa-circle-xmark text-xl">&nbsp;</i>
+            <FontAwesomeIcon :icon="faCircleXmark" size="lg" />
           </button>
         </div>
       </Container>
@@ -27,6 +27,10 @@
 </template>
 <script setup>
 import { Teleport } from "vue";
+
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
+
 import Container from "./Container.vue";
 
 defineEmits(["closeModal"]);
