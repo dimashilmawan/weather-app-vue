@@ -1,11 +1,18 @@
 <template>
   <WeatherCardSkeleton v-if="isLoading" />
-  <div v-else-if="isError" class="mt-24 rounded-md bg-red-950/60 p-10">
+  <div v-else-if="isError" class="mt-16 rounded-md bg-red-950/60 p-10">
     <p class="text-center text-xl font-medium">
       {{ isError }}
     </p>
   </div>
-  <div v-else-if="savedWeathers.length === 0">Empty</div>
+  <div
+    v-else-if="savedWeathers.length === 0"
+    class="mt-16 rounded-md bg-red-950/60 p-10"
+  >
+    <p class="text-center text-xl font-medium">
+      You haven't saved any weather yet
+    </p>
+  </div>
   <ul v-else class="mt-6 space-y-4">
     <WeatherCard
       v-for="weather in savedWeathers"
