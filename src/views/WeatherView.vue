@@ -26,12 +26,12 @@
       }}
     </p>
     <p class="mt-6 text-7xl font-bold">
-      {{ temperatureConverter(weatherData.main.temp, isCelsius) }}
+      {{ temperatureConverter(weatherData.main.temp, toggleStore.isCelsius) }}
     </p>
     <p class="mt-2">
       Feels like
       <span class="font-semibold">{{
-        temperatureConverter(weatherData.main.feels_like, isCelsius)
+        temperatureConverter(weatherData.main.feels_like, toggleStore.isCelsius)
       }}</span>
     </p>
     <div
@@ -48,10 +48,9 @@
 </template>
 <script setup>
 import WeatherViewSkeleton from "@/components/WeatherViewSkeleton.vue";
-import { inject, onMounted, ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
-
-const { isCelsius } = inject("isCelsius");
+import { toggleStore } from "../store/toggle-store";
 
 const route = useRoute();
 

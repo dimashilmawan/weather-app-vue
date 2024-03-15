@@ -67,7 +67,10 @@ const saveWeather = () => {
   savedWeathers.value.push(weatherObj);
   localStorage.setItem("saved-weathers", JSON.stringify(savedWeathers.value));
 
-  toast.success("Weather saved successfully!", { timeout: 2000 });
+  toast.success("Weather saved successfully!", {
+    timeout: 2000,
+    pauseOnHover: false,
+  });
 };
 
 const removeWeather = () => {
@@ -78,7 +81,10 @@ const removeWeather = () => {
   );
   localStorage.setItem("saved-weathers", JSON.stringify(savedWeathers.value));
 
-  toast.success("Weather removed successfully!", { timeout: 2000 });
+  toast.success("Weather removed successfully!", {
+    timeout: 2000,
+    pauseOnHover: false,
+  });
 };
 
 const hasSaved = computed(() => {

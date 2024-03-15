@@ -15,19 +15,30 @@
 
       <div>
         <p class="text-end text-3xl font-medium">
-          {{ temperatureConverter(weather.weatherData.main.temp, isCelsius) }}
+          {{
+            temperatureConverter(
+              weather.weatherData.main.temp,
+              toggleStore.isCelsius,
+            )
+          }}
         </p>
         <div class="mt-2 flex gap-2 font-medium">
           <span class="text-xs">
             H:
             {{
-              temperatureConverter(weather.weatherData.main.temp_max, isCelsius)
+              temperatureConverter(
+                weather.weatherData.main.temp_max,
+                toggleStore.isCelsius,
+              )
             }}
           </span>
           <span class="text-xs">
             L:
             {{
-              temperatureConverter(weather.weatherData.main.temp_min, isCelsius)
+              temperatureConverter(
+                weather.weatherData.main.temp_min,
+                toggleStore.isCelsius,
+              )
             }}
           </span>
         </div>
@@ -36,12 +47,10 @@
   </li>
 </template>
 <script setup>
-import { inject } from "vue";
 import { RouterLink } from "vue-router";
+import { toggleStore } from "../store/toggle-store";
 
 defineProps(["weather"]);
-
-const { isCelsius } = inject("isCelsius");
 
 const temperatureConverter = (value, isCelsius) => {
   if (isCelsius) {
